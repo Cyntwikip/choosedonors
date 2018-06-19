@@ -1,5 +1,5 @@
 from app import app
-from flask import Flask, request, jsonify, json
+from flask import Flask, request, jsonify, json, url_for, redirect
 import pickle
 import pandas as pd
 
@@ -11,6 +11,7 @@ def index():
     <div class="jumbotron jumbotron-fluid">
         <div class='container'>
             <h1>Donors Choose Recommendation System (DCRS)</h1>
+            <h3><a href="/api/kaggle/project">Try it out!</a></h3>
         </div>
     </div>
     <div class="container">
