@@ -21,7 +21,7 @@ def index():
             cat_list.append(c)
 
         return render_template('index.html', labels=labels, categories=cat_list)
-        
+
     elif request.method == 'POST':
         input = []
         for i in range(1,17):
@@ -330,6 +330,7 @@ def predict_kaggle():
 
             out, c = donors_to_recommend(X_test, clf, index = 0, cluster_disp = False)
             s += '<body><div class=\'container\'>'
+            s += """<div class="mt-2 mb-3"><a href="/">Go Back</a></div>"""
             s += '<h4>These are the potential donors for Cluster {0}</h4>'.format(c)
             s += '<table class=\'table table-dark table-striped\' style=\'white-space: nowrap; width: 1%;\'>'
             s += '<tr><td></td><td>Donor</td></tr>'
