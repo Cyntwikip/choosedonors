@@ -59,62 +59,63 @@
             </div>
 
             <div class="form-row mb-3">
-                <div class="input-group col-md-4">
+                <div class="input-group col-md-6">
                     <div class="input-group-prepend"><span class="input-group-text">{{labels[7]}}</span></div>
                     <input class="form-control" type="number" min=0 name="8" value="0">
                 </div>
-                <div class="input-group col-md-5">
+                <!-- <div class="input-group col-md-5">
+                    <div class="input-group-prepend"><span class="input-group-text">{{labels[8]}}</span></div>
+                    <select class="form-control" size="1" name="9">
+                        {% for i in categories[8] %}<option value="{{i}}">{{i}}</option>{% endfor %}
+                        <option value="{{categories[8][0]}}">{{categories[8][0]}}</option>
+                    </select><br>
+                </div> -->
+                <div class="input-group col-md-6">
                     <div class="input-group-prepend"><span class="input-group-text">{{labels[8]}}</span></div>
                     <select class="form-control" size="1" name="9">
                         {% for i in categories[8] %}<option value="{{i}}">{{i}}</option>{% endfor %}
                     </select><br>
                 </div>
-                <div class="input-group col-md-3">
+            </div>
+
+            <div class="form-row mb-3">
+                <div class="input-group col-md-6">
                     <div class="input-group-prepend"><span class="input-group-text">{{labels[9]}}</span></div>
                     <select class="form-control" size="1" name="10">
                         {% for i in categories[9] %}<option value="{{i}}">{{i}}</option>{% endfor %}
                     </select><br>
                 </div>
-            </div>
-
-            <div class="form-row mb-3">
                 <div class="input-group col-md-6">
                     <div class="input-group-prepend"><span class="input-group-text">{{labels[10]}}</span></div>
-                    <select class="form-control" size="1" name="11">
-                        {% for i in categories[10] %}<option value="{{i}}">{{i}}</option>{% endfor %}
-                    </select><br>
-                </div>
-                <div class="input-group col-md-6">
-                    <div class="input-group-prepend"><span class="input-group-text">{{labels[11]}}</span></div>
-                    <input class="form-control" type="number" min=0 max=100 step=0.01 name="12" value="0">
+                    <input class="form-control" type="number" min=0 max=100 step=0.01 name="11" value="0">
                 </div>
             </div>
 
             <div class="form-row mb-3">
+                <div class="input-group col-md-6">
+                    <div class="input-group-prepend"><span class="input-group-text">{{labels[11]}}</span></div>
+                    <select class="form-control" size="1" name="12">
+                        {% for i in categories[11] %}<option value="{{i}}">{{i}}</option>{% endfor %}
+                    </select><br>
+                </div>
                 <div class="input-group col-md-6">
                     <div class="input-group-prepend"><span class="input-group-text">{{labels[12]}}</span></div>
                     <select class="form-control" size="1" name="13">
                         {% for i in categories[12] %}<option value="{{i}}">{{i}}</option>{% endfor %}
                     </select><br>
                 </div>
+            </div>
+            <div class="form-row mb-3">
                 <div class="input-group col-md-6">
                     <div class="input-group-prepend"><span class="input-group-text">{{labels[13]}}</span></div>
                     <select class="form-control" size="1" name="14">
                         {% for i in categories[13] %}<option value="{{i}}">{{i}}</option>{% endfor %}
                     </select><br>
                 </div>
-            </div>
-            <div class="form-row mb-3">
                 <div class="input-group col-md-6">
                     <div class="input-group-prepend"><span class="input-group-text">{{labels[14]}}</span></div>
                     <select class="form-control" size="1" name="15">
                         {% for i in categories[14] %}<option value="{{i}}">{{i}}</option>{% endfor %}
-                    </select><br>
-                </div>
-                <div class="input-group col-md-6">
-                    <div class="input-group-prepend"><span class="input-group-text">{{labels[15]}}</span></div>
-                    <select class="form-control" size="1" name="16">
-                        {% for i in categories[15] %}<option value="{{i}}">{{i}}</option>{% endfor %}
                     </select><br>
                 </div>
             </div>

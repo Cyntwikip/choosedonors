@@ -10,7 +10,7 @@ def index():
     if request.method == 'GET':
         labels = ['Resource Quantity', 'Resource Unit Price (USD)', 'Project Type', 'Project Subject Category Tree',
                   'Project Subject Subcategory Tree', 'Project Grade Level Category', 'Project Resource Category',
-                  'Project Cost (USD)', 'Project Current Status', 'Teacher Prefix', 'School Metro Type',
+                  'Project Cost (USD)', 'Teacher Prefix', 'School Metro Type',
                   'School Percentage Free Lunch (%)', 'School State', 'School City', 'School County',
                   'School District']
 
@@ -24,7 +24,7 @@ def index():
 
     elif request.method == 'POST':
         input = []
-        for i in range(1,17):
+        for i in range(1,16):
             input.append(request.form.get(str(i)))
         print(input)
         session['input'] = input
@@ -99,7 +99,7 @@ def index_old():
         return s
     elif request.method == 'POST':
         input = []
-        for i in range(1,17):
+        for i in range(1,16):
             input.append(request.form.get(str(i)))
         #print(input)
         session['input'] = input
@@ -115,7 +115,7 @@ def test_page():
     if request.method == 'GET':
         labels = ['Resource Quantity', 'Resource Unit Price (USD)', 'Project Type', 'Project Subject Category Tree',
                   'Project Subject Subcategory Tree', 'Project Grade Level Category', 'Project Resource Category',
-                  'Project Cost (USD)', 'Project Current Status', 'Teacher Prefix', 'School Metro Type',
+                  'Project Cost (USD)', 'Teacher Prefix', 'School Metro Type',
                   'School Percentage Free Lunch (%)', 'School State', 'School City', 'School County',
                   'School District']
 
@@ -171,7 +171,7 @@ def donors_to_recommend(X_test, clf, index = 0, cluster_disp = False):
     project_subject_subcat = []
     project_grade_level_cat = [] 
     project_resource_cat = [] 
-    project_current_stat = []
+    #project_current_stat = []
     teacher_pref = []
     school_metro = []
     school_state = []
@@ -189,7 +189,7 @@ def donors_to_recommend(X_test, clf, index = 0, cluster_disp = False):
         project_subject_subcat.append(labels['Project Subject Subcategory Tree'].index(X_test['Project Subject Subcategory Tree'][i]))      
         project_grade_level_cat.append(labels['Project Grade Level Category'].index(X_test['Project Grade Level Category'][i]))
         project_resource_cat.append(labels['Project Resource Category'].index(X_test['Project Resource Category'][i]))  
-        project_current_stat.append(labels['Project Current Status'].index(X_test['Project Current Status'][i])) 
+        #project_current_stat.append(labels['Project Current Status'].index(X_test['Project Current Status'][i])) 
         teacher_pref.append(labels['Teacher Prefix'].index(X_test['Teacher Prefix'][i]))
         school_metro.append(labels['School Metro Type'].index(X_test['School Metro Type'][i]))
         school_state.append(labels['School State'].index(X_test['School State'][i]))
@@ -200,7 +200,7 @@ def donors_to_recommend(X_test, clf, index = 0, cluster_disp = False):
     X_test_transformed = pd.DataFrame(columns=['Resource Quantity', 'Resource Unit Price','Project Type',
        'Project Subject Category Tree', 'Project Subject Subcategory Tree',
        'Project Grade Level Category', 'Project Resource Category',
-       'Project Cost', 'Project Current Status', 'Teacher Prefix',
+       'Project Cost', 'Teacher Prefix',
        'School Metro Type','School Percentage Free Lunch', 'School State', 'School City',
        'School County', 'School District'])
 
@@ -212,7 +212,7 @@ def donors_to_recommend(X_test, clf, index = 0, cluster_disp = False):
     X_test_transformed['Project Grade Level Category'] = project_grade_level_cat
     X_test_transformed['Project Resource Category'] = project_resource_cat
     X_test_transformed['Project Cost'] = X_test['Project Cost']
-    X_test_transformed['Project Current Status'] = project_current_stat
+    #X_test_transformed['Project Current Status'] = project_current_stat
     X_test_transformed['Teacher Prefix'] = teacher_pref
     X_test_transformed['School Metro Type'] = school_metro
     X_test_transformed['School Percentage Free Lunch'] = X_test['School Percentage Free Lunch']
@@ -285,10 +285,10 @@ def predict_kaggle():
         #     s = 'Input must only be n numbers separated by commas.'
         #     return s
 
-        if len(input) != 16:
+        if len(input) != 15:
             #s += '<b>The kNN model needs only 4 numbers to do the prediction.</b>'
             #s += 'No Data Header received'
-            s += 'List should contain 16 elements'
+            s += 'List should contain 15 elements'
         else:
             pickle_in = open("model.pickle","rb")
             clf = pickle.load(pickle_in)     
@@ -302,14 +302,14 @@ def predict_kaggle():
             X_test['Project Grade Level Category'] = [input[5]]
             X_test['Project Resource Category'] = [input[6]]
             X_test['Project Cost'] = [float(input[7])]
-            X_test['Project Current Status'] = [input[8]]
-            X_test['Teacher Prefix'] = [input[9]]
-            X_test['School Metro Type'] = [input[10]]
-            X_test['School Percentage Free Lunch'] = [int(input[11])]
-            X_test['School State'] = [input[12]]
-            X_test['School City'] = [input[13]]
-            X_test['School County'] = [input[14]]
-            X_test['School District'] = [input[15]]
+            #X_test['Project Current Status'] = [input[8]]
+            X_test['Teacher Prefix'] = [input[8]]
+            X_test['School Metro Type'] = [input[9]]
+            X_test['School Percentage Free Lunch'] = [int(input[10])]
+            X_test['School State'] = [input[11]]
+            X_test['School City'] = [input[12]]
+            X_test['School County'] = [input[13]]
+            X_test['School District'] = [input[14]]
 
             # X_test['Resource Quantity'] = [10]
             # X_test['Resource Unit Price'] = [10]
@@ -368,8 +368,8 @@ def predict_kaggle_v2():
     print('Success! There is an input')
     #return str(input)
 
-    if len(input) != 16:
-        return 'List should contain 16 elements'
+    if len(input) != 15:
+        return 'List should contain 15 elements'
     
     print('16 elements found!')
     pickle_in = open("model.pickle","rb")
@@ -384,14 +384,14 @@ def predict_kaggle_v2():
     X_test['Project Grade Level Category'] = [input[5]]
     X_test['Project Resource Category'] = [input[6]]
     X_test['Project Cost'] = [float(input[7])]
-    X_test['Project Current Status'] = [input[8]]
-    X_test['Teacher Prefix'] = [input[9]]
-    X_test['School Metro Type'] = [input[10]]
-    X_test['School Percentage Free Lunch'] = [int(input[11])]
-    X_test['School State'] = [input[12]]
-    X_test['School City'] = [input[13]]
-    X_test['School County'] = [input[14]]
-    X_test['School District'] = [input[15]]
+    #X_test['Project Current Status'] = [input[8]]
+    X_test['Teacher Prefix'] = [input[8]]
+    X_test['School Metro Type'] = [input[9]]
+    X_test['School Percentage Free Lunch'] = [int(input[10])]
+    X_test['School State'] = [input[11]]
+    X_test['School City'] = [input[12]]
+    X_test['School County'] = [input[13]]
+    X_test['School District'] = [input[14]]
 
     print('Data transformation successful!')
 
