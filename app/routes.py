@@ -1,11 +1,38 @@
 from app import app
-from flask import Flask, request, jsonify, json, url_for, redirect, session
+from flask import Flask, request, jsonify, json, url_for, redirect, session, render_template
 import pickle
 import pandas as pd
+
 
 @app.route('/', methods=['GET', 'POST'])
 @app.route('/index', methods=['GET', 'POST'])
 def index():
+    if request.method == 'GET':
+        labels = ['Resource Quantity', 'Resource Unit Price (USD)', 'Project Type', 'Project Subject Category Tree',
+                  'Project Subject Subcategory Tree', 'Project Grade Level Category', 'Project Resource Category',
+                  'Project Cost (USD)', 'Project Current Status', 'Teacher Prefix', 'School Metro Type',
+                  'School Percentage Free Lunch (%)', 'School State', 'School City', 'School County',
+                  'School District']
+
+        pickle_in = open("categories.pickle","rb")
+        categories = pickle.load(pickle_in)
+        cat_list = []
+        for c in categories.values():
+            cat_list.append(c)
+
+        return render_template('index.html', labels=labels, categories=cat_list)
+        
+    elif request.method == 'POST':
+        input = []
+        for i in range(1,17):
+            input.append(request.form.get(str(i)))
+        print(input)
+        session['input'] = input
+        return redirect(url_for('predict_kaggle'))
+
+    return '<h2>Request method type not supported</h2>' 
+
+def index_old():
     if request.method == 'GET':
         s = """
         <!DOCTYPE html><link rel="stylesheet" type='text/css' href="/static/css/bootstrap.min.css">
@@ -75,6 +102,41 @@ def index():
         for i in range(1,17):
             input.append(request.form.get(str(i)))
         #print(input)
+        session['input'] = input
+        #test = session.get('input', None)
+        #print(type(test))
+        #print(test)
+        return redirect(url_for('predict_kaggle'))
+
+    return 
+
+@app.route('/testpage', methods=['GET', 'POST'])
+def test_page():
+    if request.method == 'GET':
+        labels = ['Resource Quantity', 'Resource Unit Price (USD)', 'Project Type', 'Project Subject Category Tree',
+                  'Project Subject Subcategory Tree', 'Project Grade Level Category', 'Project Resource Category',
+                  'Project Cost (USD)', 'Project Current Status', 'Teacher Prefix', 'School Metro Type',
+                  'School Percentage Free Lunch (%)', 'School State', 'School City', 'School County',
+                  'School District']
+
+        #option_template = lambda x: """<option value="{0}">{0}</option>""".format(x)
+
+        pickle_in = open("categories.pickle","rb")
+        categories = pickle.load(pickle_in)
+        #number_cats = [idx for idx, val in categories.items() if not val]
+        #print(number_cats)
+        # return 'haha'
+
+        cat_list = []
+        for c in categories.values():
+            cat_list.append(c)
+
+        return render_template('index.html', labels=labels, categories=cat_list)
+    elif request.method == 'POST':
+        input = []
+        for i in range(1,17):
+            input.append(request.form.get(str(i)))
+        print(input)
         session['input'] = input
         #test = session.get('input', None)
         #print(type(test))
