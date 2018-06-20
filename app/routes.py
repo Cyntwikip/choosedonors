@@ -7,7 +7,7 @@ import pandas as pd
 @app.route('/index', methods=['GET', 'POST'])
 def index():
     if request.method == 'GET':
-        return """
+        s = """
         <!DOCTYPE html><link rel="stylesheet" type='text/css' href="/static/css/bootstrap.min.css">
         <div class="jumbotron jumbotron-fluid">
             <div class='container'>
@@ -15,28 +15,61 @@ def index():
                 <h4>by Tristan Alba, Prince Javier, and Jude Teves</h4>
             </div>
         </div>
-        <div class="container">
-            <form method="POST">
-                Resource Quantity: <input type="number" min=0 name="1" value="10"><br>
-                Resource Unit Price: <input type="number" min=0 name="2" value="10"><br>
-                Project Type: <input type="text" name="3" value="Teacher-Led"><br>
-                Project Subject Category Tree: <input type="text" name="4" value="Health & Sports"><br>
-                Project Subject Subcategory Tree: <input type="text" name="5" value="Gym & Fitness, Health & Wellness"><br>
-                Project Grade Level Category: <input type="text" name="6" value="Grades 9-12"><br>
-                Project Resource Category: <input type="text" name="7" value="Sports & Exercise Equipment"><br>
-                Project Cost: <input type="number" step=0.01 min=0 name="8" value="53.3"><br>
-                Project Current Status: <input type="text" name="9" value="Fully Funded"><br>
-                Teacher Prefix: <input type="text" name="10" value="Mrs."><br>
-                School Metro Type: <input type="text" name="11" value="suburban"><br>
-                School Percentage Free Lunch: <input type="number" min=0 name="12" value="65"><br>
-                School State: <input type="text" name="13" value="New York"><br>
-                School City: <input type="text" name="14" value="New York City"><br>
-                School County: <input type="text" name="15" value="Queens"><br>
-                School District: <input type="text" name="16" value="New York Dept Of Education"><br>
-                <input type="submit" value="Submit"><br>
-            </form>
+        """
+        # <div class="container">
+        #     <form method="POST">
+        #         Resource Quantity: <input type="number" min=0 name="1" value="10"><br>
+        #         Resource Unit Price: <input type="number" min=0 name="2" value="10"><br>
+        #         Project Type: <input type="text" name="3" value="Teacher-Led"><br>
+        #         Project Subject Category Tree: <input type="text" name="4" value="Health & Sports"><br>
+        #         Project Subject Subcategory Tree: <input type="text" name="5" value="Gym & Fitness, Health & Wellness"><br>
+        #         Project Grade Level Category: <input type="text" name="6" value="Grades 9-12"><br>
+        #         Project Resource Category: <input type="text" name="7" value="Sports & Exercise Equipment"><br>
+        #         Project Cost: <input type="number" step=0.01 min=0 name="8" value="53.3"><br>
+        #         Project Current Status: <input type="text" name="9" value="Fully Funded"><br>
+        #         Teacher Prefix: <input type="text" name="10" value="Mrs."><br>
+        #         School Metro Type: <input type="text" name="11" value="suburban"><br>
+        #         School Percentage Free Lunch: <input type="number" min=0 name="12" value="65"><br>
+        #         School State: <input type="text" name="13" value="New York"><br>
+        #         School City: <input type="text" name="14" value="New York City"><br>
+        #         School County: <input type="text" name="15" value="Queens"><br>
+        #         School District: <input type="text" name="16" value="New York Dept Of Education"><br>
+        #         <input type="submit" value="Submit"><br>
+        #     </form>
+        # </div>
+        s += """<div class="container"><form method="POST">"""
+        labels = ['Resource Quantity', 'Resource Unit Price (USD)', 'Project Type', 'Project Subject Category Tree',
+                  'Project Subject Subcategory Tree', 'Project Grade Level Category', 'Project Resource Category',
+                  'Project Cost (USD)', 'Project Current Status', 'Teacher Prefix', 'School Metro Type',
+                  'School Percentage Free Lunch (%)', 'School State', 'School City', 'School County',
+                  'School District']
+
+        option_template = lambda x: """<option value="{0}">{0}</option>""".format(x)
+
+        pickle_in = open("categories.pickle","rb")
+        categories = pickle.load(pickle_in)
+
+        for idx, c in enumerate(categories):
+            col = categories[c]
+            s += labels[idx]
+            if not col:
+                step = 1
+                if idx == 7:
+                    step = 0.01
+                s += """  <input type="number" step={1} min=0 name="{0}" value="0"><br> """.format(idx+1, step)
+            else:
+                s += """<select name="{0}" size="1">""".format(idx+1)
+                for options in col:
+                    s += option_template(options)
+                s += """</select><br>"""
+
+        s += """
+        <input type="submit" value="Submit"><br>
+        </form>
         </div>
         """
+
+        return s
     elif request.method == 'POST':
         input = []
         for i in range(1,17):
