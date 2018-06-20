@@ -1,23 +1,54 @@
 from app import app
-from flask import Flask, request, jsonify, json, url_for, redirect
+from flask import Flask, request, jsonify, json, url_for, redirect, session
 import pickle
 import pandas as pd
 
-@app.route('/')
-@app.route('/index')
+@app.route('/', methods=['GET', 'POST'])
+@app.route('/index', methods=['GET', 'POST'])
 def index():
-    return """
-    <!DOCTYPE html><link rel="stylesheet" type='text/css' href="/static/css/bootstrap.min.css">
-    <div class="jumbotron jumbotron-fluid">
-        <div class='container'>
-            <h1>Donors Choose Recommendation System (DCRS)</h1>
-            <h3><a href="/api/kaggle/project">Try it out!</a></h3>
+    if request.method == 'GET':
+        return """
+        <!DOCTYPE html><link rel="stylesheet" type='text/css' href="/static/css/bootstrap.min.css">
+        <div class="jumbotron jumbotron-fluid">
+            <div class='container'>
+                <h1>Donors Choose Recommendation System (DCRS)</h1>
+                <h4>by Tristan Alba, Prince Javier, and Jude Teves</h4>
+            </div>
         </div>
-    </div>
-    <div class="container">
-        <h4>by Tristan Alba, Prince Javier, and Jude Teves</h4>
-    </div>
-    """
+        <div class="container">
+            <form method="POST">
+                Resource Quantity: <input type="number" min=0 name="1" value="10"><br>
+                Resource Unit Price: <input type="number" min=0 name="2" value="10"><br>
+                Project Type: <input type="text" name="3" value="Teacher-Led"><br>
+                Project Subject Category Tree: <input type="text" name="4" value="Health & Sports"><br>
+                Project Subject Subcategory Tree: <input type="text" name="5" value="Gym & Fitness, Health & Wellness"><br>
+                Project Grade Level Category: <input type="text" name="6" value="Grades 9-12"><br>
+                Project Resource Category: <input type="text" name="7" value="Sports & Exercise Equipment"><br>
+                Project Cost: <input type="number" step=0.01 min=0 name="8" value="53.3"><br>
+                Project Current Status: <input type="text" name="9" value="Fully Funded"><br>
+                Teacher Prefix: <input type="text" name="10" value="Mrs."><br>
+                School Metro Type: <input type="text" name="11" value="suburban"><br>
+                School Percentage Free Lunch: <input type="number" min=0 name="12" value="65"><br>
+                School State: <input type="text" name="13" value="New York"><br>
+                School City: <input type="text" name="14" value="New York City"><br>
+                School County: <input type="text" name="15" value="Queens"><br>
+                School District: <input type="text" name="16" value="New York Dept Of Education"><br>
+                <input type="submit" value="Submit"><br>
+            </form>
+        </div>
+        """
+    elif request.method == 'POST':
+        input = []
+        for i in range(1,17):
+            input.append(request.form.get(str(i)))
+        #print(input)
+        session['input'] = input
+        #test = session.get('input', None)
+        #print(type(test))
+        #print(test)
+        return redirect(url_for('predict_kaggle'))
+
+    return 
 
 @app.route('/apis/<string:text>', methods=['GET'])
 def method1(text):
@@ -38,33 +69,6 @@ def method3():
     for key,val in req_data.items():
         s += '<p>{0} : {1}</p>'.format(key, val)
     return s
-
-# @app.route('/apis/predict_iris_dataset', methods=['GET'])
-# def predict_iris_dataset():
-#     s = ''
-#     req_data = request.args
-    
-#     if 'input' in req_data:
-#         s += '<b>Here are the inputs:</b>'
-#         input = req_data['input']
-#         try:
-#             input = list(map(float,input.split(',')))
-#             s += '<p>{0}</p>'.format(input)
-#         except:
-#             s = 'Input must only be 4 numbers separated by commas.'
-#             return s
-
-#         if len(input) !=4:
-#             s += '<b>The kNN model needs only 4 numbers to do the prediction.</b>'
-#         else:
-#             classifications = ['setosa', 'versicolor', 'virginica']
-#             pickle_in = open("model.pickle","rb")
-#             model = pickle.load(pickle_in)     
-#             result = classifications[model.predict([input])[0]]
-#             s += '<b>The flower is: {0}</b>'.format(result)
-#     else:
-#         s = '<b>There is no input :(</b>'
-#     return s
 
 def donors_to_recommend(X_test, clf, index = 0, cluster_disp = False):
     project_type = []
@@ -137,40 +141,41 @@ def donors_to_recommend(X_test, clf, index = 0, cluster_disp = False):
 def predict_kaggle():
     
     s = '<!DOCTYPE html><link rel=\"stylesheet\" type=\'text/css\' href=\"/static/css/bootstrap.min.css\">'
+    #return 'Hi'
 
-    if request.method == 'GET':
-        s += '''
-        <div class='container'>
-            <form method="POST">
-                Resource Quantity: <input type="number" min=0 name="1"><br>
-                Resource Unit Price: <input type="number" min=0 name="2"><br>
-                Project Type: <input type="text" name="3"><br>
-                Project Subject Category Tree: <input type="text" name="4"><br>
-                Project Subject Subcategory Tree: <input type="text" name="5"><br>
-                Project Grade Level Category: <input type="text" name="6"><br>
-                Project Resource Category: <input type="text" name="7"><br>
-                Project Cost: <input type="number" step=0.01 min=0 name="8"><br>
-                Project Current Status: <input type="text" name="9"><br>
-                Teacher Prefix: <input type="text" name="10"><br>
-                School Metro Type: <input type="text" name="11"><br>
-                School Percentage Free Lunch: <input type="number" min=0 name="12"><br>
-                School State: <input type="text" name="13"><br>
-                School City: <input type="text" name="14"><br>
-                School County: <input type="text" name="15"><br>
-                School District: <input type="text" name="16"><br>
-                <input type="submit" value="Submit"><br>
-            </form>
-        </div>
-        '''
+    # if request.method == 'GET':
+    #     s += '''
+    #     <div class='container'>
+    #         <form method="POST">
+    #             Resource Quantity: <input type="number" min=0 name="1"><br>
+    #             Resource Unit Price: <input type="number" min=0 name="2"><br>
+    #             Project Type: <input type="text" name="3"><br>
+    #             Project Subject Category Tree: <input type="text" name="4"><br>
+    #             Project Subject Subcategory Tree: <input type="text" name="5"><br>
+    #             Project Grade Level Category: <input type="text" name="6"><br>
+    #             Project Resource Category: <input type="text" name="7"><br>
+    #             Project Cost: <input type="number" step=0.01 min=0 name="8"><br>
+    #             Project Current Status: <input type="text" name="9"><br>
+    #             Teacher Prefix: <input type="text" name="10"><br>
+    #             School Metro Type: <input type="text" name="11"><br>
+    #             School Percentage Free Lunch: <input type="number" min=0 name="12"><br>
+    #             School State: <input type="text" name="13"><br>
+    #             School City: <input type="text" name="14"><br>
+    #             School County: <input type="text" name="15"><br>
+    #             School District: <input type="text" name="16"><br>
+    #             <input type="submit" value="Submit"><br>
+    #         </form>
+    #     </div>
+    #     '''
 
-        return s
+    #     return s
 
 
     #req_data = request.args
-    input = []
-
-    for i in range(1,17):
-        input.append(request.form.get(str(i)))
+    # input = []
+    # for i in range(1,17):
+    #     input.append(request.form.get(str(i)))
+    input = session.get('input', None)
 
     if 1 == 1:
     #if 'input' in req_data:
@@ -230,7 +235,7 @@ def predict_kaggle():
 
             out, c = donors_to_recommend(X_test, clf, index = 0, cluster_disp = False)
             s += '<body><div class=\'container\'>'
-            s += '<h3>These are the potential donors for Cluster {0}</h3>'.format(c)
+            s += '<h4>These are the potential donors for Cluster {0}</h4>'.format(c)
             s += '<table class=\'table table-dark table-striped\' style=\'white-space: nowrap; width: 1%;\'>'
             s += '<tr><td></td><td>Donor</td></tr>'
             # s += '<table><tr><th>These are the potential donors for Cluster '
